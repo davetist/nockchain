@@ -36,9 +36,10 @@ async fn main() {
             );
             commands::package::run(PackageCommand::Install).await
         }
-        Some(Commands::Run { project, args }) => {
+        Some(Commands::Run { project, bin, args }) => {
             commands::build::run(ProjectCommand::Run {
                 project: Some(project),
+                bin,
                 args,
             })
             .await

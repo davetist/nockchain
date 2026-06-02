@@ -118,9 +118,12 @@ Supported version spec formats include:
 ## Build and Run Notes
 
 - `nockup project build <project>` runs `cargo build --release` then compiles Hoon kernels.
+- `nockup project build .` builds the project in the current directory.
 - Single-binary templates use `hoon/app/app.hoon` and produce `out.jam`.
 - Multi-binary templates (notably `grpc`) map each `[[bin]]` target to `hoon/app/<bin>.hoon` and produce `<bin>.jam` files.
-- `nockup project run <project>` runs `cargo run --release` for one default binary. For multi-binary templates, run binaries explicitly with `cargo run --release --bin <name>`.
+- `nockup project run <project>` runs `cargo run --release` for one default binary.
+- `nockup project run .` runs the project in the current directory.
+- Multi-binary projects require an explicit binary, for example `nockup project run <project> --bin listen`.
 
 ## Channels and Cache
 
@@ -138,7 +141,7 @@ nockup cache clear --all
 - `nockup update`: refresh local toolchain cache and binaries.
 - `nockup project init`: scaffold project from `nockapp.toml`.
 - `nockup project build [project]`: build Rust + compile Hoon kernels.
-- `nockup project run [project] [-- args...]`: run app via Cargo.
+- `nockup project run [project] [--bin <name>] [-- args...]`: run app via Cargo.
 - `nockup package init [name]`: initialize a Hoon library package (`hoon.toml`).
 - `nockup package add/remove/list/install/update/purge`: dependency management.
 - `nockup cache clear [--git --packages --registry --all]`: clear caches.

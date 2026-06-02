@@ -1,4 +1,4 @@
-use std::path::Path;
+use std::path::{Path, PathBuf};
 use std::process::Stdio;
 
 use anyhow::{Context, Result};
@@ -8,23 +8,22 @@ use tokio::process::Command;
 use crate::manifest::NockAppManifest;
 
 pub async fn run(project: &str) -> Result<()> {
-    // If project is ".", try to read nockapp.toml to get the actual project name
-    let project_name = if project == "." {
+    // If project is ".", build the project in the current directory and read
+    // nockapp.toml only for the display/package name.
+    let (project_name, project_dir) = if project == "." {
         let cwd = std::env::current_dir()?;
         let manifest_path = cwd.join("nockapp.toml");
 
         if manifest_path.exists() {
             let manifest =
                 NockAppManifest::load(&manifest_path).context("Failed to parse nockapp.toml")?;
-            manifest.package.name.trim().to_string()
+            (manifest.package.name.trim().to_string(), cwd)
         } else {
-            project.to_string()
+            (project.to_string(), cwd)
         }
     } else {
-        project.to_string()
+        (project.to_string(), PathBuf::from(project))
     };
-
-    let project_dir = Path::new(&project_name);
 
     // Check if project directory exists
     if !project_dir.exists() {
@@ -37,11 +36,11 @@ pub async fn run(project: &str) -> Result<()> {
     let nockapp_manifest = project_dir.join("nockapp.toml");
     if nockapp_manifest.exists() {
         // Check if dependencies need to be installed
-        if should_install_dependencies(project_dir).await? {
+        if should_install_dependencies(&project_dir).await? {
             println!("{} Installing dependencies...", "📦".cyan());
             // Change to project directory to run install
             let original_dir = std::env::current_dir()?;
-            std::env::set_current_dir(project_dir)?;
+            std::env::set_current_dir(&project_dir)?;
 
             // Run package install
             let install_result = crate::commands::package::install::run().await;
@@ -100,7 +99,7 @@ pub async fn run(project: &str) -> Result<()> {
     cargo_command
         .arg("build")
         .arg("--release") // Build in release mode by default
-        .current_dir(project_dir)
+        .current_dir(&project_dir)
         .stdout(Stdio::inherit())
         .stderr(Stdio::inherit());
 
@@ -153,10 +152,10 @@ pub async fn run(project: &str) -> Result<()> {
         hoonc_command
             .arg(
                 hoon_app_path
-                    .strip_prefix(project_dir)
+                    .strip_prefix(&project_dir)
                     .expect("hoon_app_path should be under project_dir"),
             )
-            .current_dir(project_dir) // Run in project directory
+            .current_dir(&project_dir) // Run in project directory
             .stdout(Stdio::inherit())
             .stderr(Stdio::inherit());
 

@@ -1,19 +1,19 @@
 [package]
-name = "repl"
+name = "{{project_name}}"
 version = "0.1.0"
 edition = "2021"
-authors = ["N. E. Davis <neal@zorp.io>"]
-description = "A NockApp project"
+authors = [{{{authors}}}]
+description = "{{description}}"
 
 [[bin]]
-name = "repl"
+name = "{{project_name}}"
 path = "src/main.rs"
 
 [dependencies]
 # NockVM dependency
-nockapp = { git = "https://github.com/nockchain/nockchain.git", rev = "336f744b6b83448ec2b86473a3dec29b15858999" }
-nockvm = { git = "https://github.com/nockchain/nockchain.git", rev = "336f744b6b83448ec2b86473a3dec29b15858999" }
-nockvm_macros = { git = "https://github.com/nockchain/nockchain.git", rev = "336f744b6b83448ec2b86473a3dec29b15858999" }
+nockapp = { git = "https://github.com/nockchain/nockchain.git", rev = "{{nockapp_commit_hash}}" }
+nockvm = { git = "https://github.com/nockchain/nockchain.git", rev = "{{nockapp_commit_hash}}" }
+nockvm_macros = { git = "https://github.com/nockchain/nockchain.git", rev = "{{nockapp_commit_hash}}" }
 
 # Common dependencies for NockApps
 serde = { version = "1.0", features = ["derive"] }

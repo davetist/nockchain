@@ -20,11 +20,6 @@ nockup project run {{project_name}}
 From this project directory directly:
 
 ```sh
-cargo build --release
-hoonc hoon/app/app.hoon
-cargo run --release
+nockup project build .
+nockup project run .
 ```
-
-## Note
-
-The template `Cargo.toml` currently names the package/bin `http-server`. Rename it if you want `http-static` naming in Cargo artifacts.

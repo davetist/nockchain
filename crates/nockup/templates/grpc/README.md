@@ -21,12 +21,18 @@ nockup project build {{project_name}}
 
 This compiles Hoon apps and writes `listen.jam` and `talk.jam`.
 
+From this project directory directly:
+
+```sh
+nockup project build .
+```
+
 ## Run
 
 `nockup project run` is single-binary oriented. For this template, run binaries explicitly:
 
 ```sh
 cd {{project_name}}
-cargo run --release --bin listen
-cargo run --release --bin talk
+nockup project run . --bin listen
+nockup project run . --bin talk
 ```

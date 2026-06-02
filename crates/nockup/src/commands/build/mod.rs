@@ -13,9 +13,9 @@ pub async fn run(cmd: ProjectCommand) -> Result<()> {
             let project = project.as_deref().unwrap_or(".");
             builder_impl::run(project).await
         }
-        ProjectCommand::Run { project, args } => {
+        ProjectCommand::Run { project, bin, args } => {
             let project = project.as_deref().unwrap_or(".");
-            run::run(project.to_string(), args).await
+            run::run(project.to_string(), bin, args).await
         }
         ProjectCommand::Init => init::run().await,
     }

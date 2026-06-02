@@ -53,6 +53,9 @@ pub enum Commands {
     #[command(hide = true)]
     Run {
         project: String,
+        /// Binary target to run for multi-binary projects
+        #[arg(long)]
+        bin: Option<String>,
         #[arg(trailing_var_arg = true, allow_hyphen_values = true)]
         args: Vec<String>,
     },
@@ -69,6 +72,9 @@ pub enum ProjectCommand {
     /// Run a NockApp project
     Run {
         project: Option<String>,
+        /// Binary target to run for multi-binary projects
+        #[arg(long)]
+        bin: Option<String>,
         #[arg(trailing_var_arg = true, allow_hyphen_values = true)]
         args: Vec<String>,
     },
